@@ -16,7 +16,7 @@ branches:
 deploy:
   provider: pages
   local-dir: docs
-  skip-cleanup: true
+  skip-cleanup: false
   github-token: $CI_TOKEN # Set in the settings page of your repository, as a secure variable
   keep-history: true
   on:
