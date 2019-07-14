@@ -1,0 +1,16 @@
+{
+  "name": "container",
+  "private": true,
+  "scripts": {
+    "start": "yarn && lerna exec --stream -- yarn",
+    "clean": "lerna clean --yes && rm -rf node_modules",
+    "serve": "lerna run serve --parallel",
+    "build": "lerna run build --parallel",
+    "copy": "rimraf docs && node ./copy.js",
+    "build:example": "yarn build && yarn copy"
+  },
+  "devDependencies": {
+    "lerna": "^3.15.0",
+    "recursive-copy": "^2.0.10"
+  }
+}
