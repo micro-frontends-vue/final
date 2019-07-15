@@ -1,7 +1,7 @@
 <template>
   <div id="typescript">
     <div id="typescript-nav">
-      <router-link to="/typescript/">Home</router-link> |
+      <router-link to="/typescript/home">Home</router-link> |
       <router-link to="/typescript/about">About</router-link>
     </div>
     <router-view/>
@@ -16,6 +16,7 @@
   text-align: center;
   color: #2c3e50;
 }
+
 #typescript-nav {
   padding: 30px;
 }

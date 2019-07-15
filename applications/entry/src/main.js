@@ -25,27 +25,25 @@ const loadApplication = async () => {
   const { default: application } = await window.System.import(`/${name}/main.js`)
   cache[name] = application
 
-  registerApplication(
-    name,
-    application,
-    pathPrefix(`/${name}`)
-  )
-
   window.NProgress.done(true)
+
+  return application
 }
 
-const loadApplications = () => {
-  loadApplication()
-
-  window.addEventListener('hashchange', () => {
-    loadApplication()
-  })
-}
-
-window.NProgress.configure({ showSpinner: true })
-
-loadApplications() // 监听 hash 加载子项目
 start() // 启动 single-spa
 
+window.NProgress.configure({ showSpinner: true })
 window._singleSpa = singleSpa
-window._applicationCache = cache
+window._applications = cache
+
+registerApplication(
+  'javascript',
+  () => loadApplication('javascript'),
+  pathPrefix('/javascript')
+)
+
+registerApplication(
+  'typescript',
+  () => loadApplication('typescript'),
+  pathPrefix('/typescript')
+)

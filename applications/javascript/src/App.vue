@@ -1,7 +1,7 @@
 <template>
   <div id="javascript">
     <div id="javascript-nav">
-      <router-link to="/javascript/">Home</router-link> |
+      <router-link to="/javascript/home">Home</router-link> |
       <router-link to="/javascript/about">About</router-link>
     </div>
     <router-view/>
@@ -16,6 +16,7 @@
   text-align: center;
   color: #2c3e50;
 }
+
 #javascript-nav {
   padding: 30px;
 }
