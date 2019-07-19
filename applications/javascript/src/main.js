@@ -1,23 +1,29 @@
 import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Vuex from 'vuex'
 import singleSpaVue from 'single-spa-vue'
 import App from './App.vue'
-import router from './router'
-import store from './store'
+import { generateRouter } from './router'
+import { generateStore } from './store'
 
-const appOptions = {
-  el: `#javascript`,
-  router,
-  store,
-  render: (h) => h(App)
+export default {
+  name: 'javascirpt',
+  render (inject = {}) {
+    const { _Vue = Vue, _VueRouter = VueRouter, _Vuex = Vuex } = inject
+    const appOptions = {
+      el: `#javascript`,
+      router: generateRouter(_Vue, _VueRouter),
+      store: generateStore(_Vue, _Vuex),
+      render: (h) => h(App)
+    }
+    const vueLifecycles = singleSpaVue({ Vue: _Vue, appOptions })
+
+    console.log('javascript:', _Vue.version)
+
+    return {
+      bootstrap: [vueLifecycles.bootstrap],
+      mount: [vueLifecycles.mount],
+      unmount: [vueLifecycles.unmount]
+    }
+  }
 }
-
-const vueLifecycles = singleSpaVue({
-  Vue,
-  appOptions
-})
-
-export const bootstrap = [vueLifecycles.bootstrap]
-
-export const mount = [vueLifecycles.mount]
-
-export const unmount = [vueLifecycles.unmount]

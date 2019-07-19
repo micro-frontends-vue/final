@@ -1,16 +1,14 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+export function generateStore (Vue, Vuex) {
+  Vue.use(Vuex)
+  return new Vuex.Store({
+    state: {
+      name: 'javascript'
+    },
+    mutations: {
 
-Vue.use(Vuex)
+    },
+    actions: {
 
-export default new Vuex.Store({
-  state: {
-    name: 'javascript'
-  },
-  mutations: {
-
-  },
-  actions: {
-
-  }
-})
+    }
+  })
+}

@@ -4,6 +4,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+console.log('typescript:', Vue.version)
+
 const appOptions = {
   el: `#typescript`,
   router,

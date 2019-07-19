@@ -9,27 +9,34 @@ log('NODE_ENV: ', NODE_ENV)
 module.exports = {
   publicPath: `/${APP_NAME}/`,
 
-  productionSourceMap: false,
+  css: {
+    extract: false
+  },
 
-  configureWebpack: {
-    entry: './src/entry.ts',
-
-    output: {
-      libraryExport: 'default',
-      jsonpFunction: `webpackJsonp-${APP_NAME}`
-    },
-
-    externals: {
+  chainWebpack: (config) => {
+    config.externals({
       vue: 'Vue',
       'vue-router': 'VueRouter',
       vuex: 'Vuex'
-    },
+    })
 
-    plugins: [
-      new webpack.DefinePlugin({
-        'process.env.VUE_APP_NAME': JSON.stringify(APP_NAME)
-      })
-    ]
+    config.output
+      .filename('main.js')
+      .chunkFilename('[name].[chunkhash:8].js')
+      .jsonpFunction(`webpackJsonp-${APP_NAME}`)
+      .library(`app-${APP_NAME}`)
+      .libraryTarget('umd')
+
+    config.optimization.splitChunks(false)
+
+    config.plugin('define').use(webpack.DefinePlugin, [{
+      'process.env.VUE_APP_NAME': JSON.stringify(APP_NAME)
+    }])
+
+    config.plugins
+      .delete('html')
+      .delete('preload')
+      .delete('prefetch')
   },
 
   devServer: {

@@ -25,7 +25,15 @@ const loadApplication = async () => {
   const { default: application } = await window.System.import(`/${name}/main.js`)
   cache[name] = application
 
+  console.log(name, application)
+
   window.NProgress.done(true)
+
+  if (typeof application.render === 'function') {
+    const app = application.render()
+    console.log(name, app)
+    return app
+  }
 
   return application
 }
