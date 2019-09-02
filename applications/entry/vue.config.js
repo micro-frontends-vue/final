@@ -22,11 +22,11 @@ module.exports = {
   productionSourceMap: false,
 
   configureWebpack: {
-    externals: {
-      vue: 'Vue',
-      'vue-router': 'VueRouter',
-      vuex: 'Vuex'
-    },
+    // externals: {
+    //   vue: 'Vue',
+    //   'vue-router': 'VueRouter',
+    //   vuex: 'Vuex'
+    // },
 
     plugins: [
       new webpack.DefinePlugin({

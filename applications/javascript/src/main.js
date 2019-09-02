@@ -18,7 +18,9 @@ export default {
     }
     const vueLifecycles = singleSpaVue({ Vue: _Vue, appOptions })
 
-    console.log('javascript:', _Vue.version)
+    console.log('js - vue:', _Vue.version)
+    console.log('js - vue-router:', _VueRouter.version)
+    console.log('js - vuex:', _Vuex.version)
 
     return {
       bootstrap: [vueLifecycles.bootstrap],

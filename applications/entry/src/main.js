@@ -31,7 +31,7 @@ const loadApplication = async () => {
 
   if (typeof application.render === 'function') {
     const app = application.render()
-    console.log(name, app)
+    // console.log(name, app)
     return app
   }
 
