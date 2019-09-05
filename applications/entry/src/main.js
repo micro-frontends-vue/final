@@ -1,7 +1,7 @@
 import * as singleSpa from 'single-spa'
 import modules from './modules'
 
-const { registerApplication, start } = singleSpa
+const { registerApplication, start, navigateToUrl } = singleSpa
 const cache = Object.create(null)
 
 const pathPrefix = (prefix) => (location) => {
@@ -41,7 +41,7 @@ const loadApplication = async () => {
 start() // 启动 single-spa
 
 window.NProgress.configure({ showSpinner: true })
-window._singleSpa = singleSpa
+window.navigateToUrl = navigateToUrl
 window._applications = cache
 
 registerApplication(
