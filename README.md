@@ -17,10 +17,10 @@
 
 ```bash
 # 安装依赖
-yarn start
+yarn bootstrap
 
 # 开发模式
-yarn serve
+yarn start
 
 # 打开: http://localhost:10240/
 ```
