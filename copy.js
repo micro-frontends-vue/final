@@ -1,4 +1,9 @@
+const fs = require('fs');
 const copy = require('recursive-copy');
+
+if (!fs.existsSync('docs')) {
+  fs.mkdirSync('docs');
+}
 
 const task = [
   {
@@ -17,7 +22,6 @@ const task = [
 
 task.forEach(({ src, dest }) => {
   copy(src, dest, (error) => {
-    error &&
-      console.error('[Copy failed]', `src: ${src}, dest: ${dest}`, error);
+    console.log('[Copy]', `src: ${src}, dest: ${dest},`, error || 'success.');
   });
 });
