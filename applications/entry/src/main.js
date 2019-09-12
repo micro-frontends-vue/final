@@ -24,10 +24,10 @@ const loadApplication = async () => {
 
   window.NProgress.start()
 
-  const { default: application } = await window.System.import(`/${name}/main.js`)
+  const { default: application } = await window.System.import(`./${name}/main.js`)
   cache[name] = application
 
-  console.log(name, application)
+  // console.log(name, application)
 
   window.NProgress.done(true)
 
@@ -50,7 +50,7 @@ const navigateToApplication = async (name) => {
 
   console.log('after load application', name)
 
-  navigateToUrl(`/#/${name}`)
+  navigateToUrl(`#/${name}`)
 }
 
 const routes = [

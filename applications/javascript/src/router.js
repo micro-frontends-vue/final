@@ -31,7 +31,6 @@ export function generateRouter (Vue, VueRouter) {
   Vue.use(VueRouter)
 
   return new VueRouter({
-    base: `/${APP_NAME}/`,
     routes
   })
 }

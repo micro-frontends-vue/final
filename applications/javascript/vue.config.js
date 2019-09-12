@@ -7,7 +7,7 @@ log('APP_NAME: ', APP_NAME)
 log('NODE_ENV: ', NODE_ENV)
 
 module.exports = {
-  publicPath: `/${APP_NAME}/`,
+  publicPath: `${NODE_ENV === 'development' ? '' : '.'}/${APP_NAME}/`,
 
   css: {
     extract: false
