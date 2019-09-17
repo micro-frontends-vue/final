@@ -14,6 +14,56 @@ export const UNLOADING = 'UNLOADING'
 export const LOAD_ERROR = 'LOAD_ERROR'
 export const SKIP_BECAUSE_BROKEN = 'SKIP_BECAUSE_BROKEN'
 
+function promiseQueue (promises) {
+  async function queue () {
+    const res = []
+    for (const p of promises) {
+      res.push(await p())
+    }
+    return res
+  }
+
+  return queue()
+}
+
+function filterActiveApplications () {
+  return applications.filter(({ activeWhen }) => activeWhen(window.location))
+}
+
+function filterUnActiveApplications () {
+  return applications.filter(({ activeWhen, response }) => response && !activeWhen(window.location))
+}
+
+export function getApplications () {
+  return applications
+}
+
+async function match () {
+  const activeApplications = filterActiveApplications()
+  console.log('active:', activeApplications)
+  for (const application of activeApplications) {
+    await promiseQueue([
+      async () => loadApplication(application.name),
+      async () => bootstrapApplication(application.name),
+      async () => unmountApplications(),
+      async () => mountApplication(application.name)
+    ])
+    // await loadApplication(application.name)
+    // await bootstrapApplication(application.name)
+    // await unmountApplications()
+    // await mountApplication(application.name)
+  }
+}
+
+export async function start () {
+  console.log('start app')
+  match()
+  window.addEventListener('popstate', (e) => {
+    console.log('popstate, from start:', e)
+    match()
+  })
+}
+
 export async function registerApplication (appName, applicationOrLoadingFn, activityFn, customProps = {}) {
   applications.push({
     loadErrorTime: 0,
@@ -49,7 +99,11 @@ export async function loadApplication (appName) {
 
   application.status = NOT_BOOTSTRAPPED
 
-  return application.loadImpl()
+  if (!application.response) {
+    application.response = await application.loadImpl()
+  }
+
+  return application
 }
 
 export async function unloadApplication (appName, opts = { waitForUnmount: false }) {
@@ -61,7 +115,7 @@ export async function bootstrapApplication (appName) {
   const application = findApplication(appName)
   ensureApplication(application, appName, 'bootstrap')
 
-  const { bootstrap } = await application.loadImpl()
+  const { bootstrap } = application.response
 
   return runHook(bootstrap)
 }
@@ -70,7 +124,7 @@ export async function mountApplication (appName) {
   const application = findApplication(appName)
   ensureApplication(application, appName, 'mount')
 
-  const { mount } = await application.loadImpl()
+  const { mount } = application.response
 
   return runHook(mount)
 }
@@ -79,9 +133,18 @@ export async function unmountApplication (appName) {
   const application = findApplication(appName)
   ensureApplication(application, appName, 'unmount')
 
-  const { unmount } = await application.loadImpl()
+  const { unmount } = application.response
 
   return runHook(unmount)
+}
+
+export async function unmountApplications () {
+  const unActiveApplications = filterUnActiveApplications()
+  console.log('unActive:', unActiveApplications)
+
+  for (const application of unActiveApplications) {
+    await unmountApplication(application.name)
+  }
 }
 
 function ensureApplication (application, appName, scope) {
@@ -90,10 +153,10 @@ function ensureApplication (application, appName, scope) {
   }
 }
 
-function runHook (hook) {
-  if (Array.isArray(hook)) {
-    return Promise.all(hook.map(func => func()))
+function runHook (hooks) {
+  if (Array.isArray(hooks)) {
+    return Promise.all(hooks.map(hook => hook({})))
   } else {
-    return hook()
+    return hooks({})
   }
 }
