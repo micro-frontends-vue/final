@@ -4,37 +4,17 @@
   "version": "0.1.0",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --report",
-    "lint": "vue-cli-service lint"
+    "build": "vue-cli-service build --report"
   },
   "dependencies": {
-    "single-spa-vue": "^1.4.0",
+    "single-spa-vue": "^1.5.4",
     "vue": "2.5.22",
     "vue-router": "3.0.3",
     "vuex": "3.0.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-eslint": "^3.8.0",
-    "@vue/cli-service": "^3.8.0",
-    "@vue/eslint-config-standard": "^4.0.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
+    "@vue/cli-service": "^4.1.0",
     "vue-template-compiler": "2.5.22"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "@vue/standard"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
   },
   "postcss": {
     "plugins": {
