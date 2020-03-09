@@ -1,4 +1,5 @@
-import * as singleSpa from 'single-spa'
+// import * as singleSpa from 'single-spa'
+import * as singleSpa from './lib/application'
 import modules from './modules'
 
 window.NProgress.configure({ showSpinner: true })
@@ -67,11 +68,11 @@ const routes = [
 ]
 
 const startSingleSpa = (routes = []) => {
-  start() // 启动 single-spa
-
   routes.forEach(({ path, name, application }) => {
     registerApplication(name, application, pathPrefix(path))
   })
+
+  start() // 启动 single-spa
 }
 
 startSingleSpa(routes)

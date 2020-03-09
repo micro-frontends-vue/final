@@ -48,10 +48,6 @@ async function match () {
       async () => unmountApplications(),
       async () => mountApplication(application.name)
     ])
-    // await loadApplication(application.name)
-    // await bootstrapApplication(application.name)
-    // await unmountApplications()
-    // await mountApplication(application.name)
   }
 }
 
@@ -145,6 +141,10 @@ export async function unmountApplications () {
   for (const application of unActiveApplications) {
     await unmountApplication(application.name)
   }
+}
+
+export function navigateToUrl (url) {
+  console.log('navigate to:', url)
 }
 
 function ensureApplication (application, appName, scope) {
