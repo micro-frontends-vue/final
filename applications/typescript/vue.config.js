@@ -8,7 +8,7 @@ log('NODE_ENV: ', NODE_ENV)
 
 module.exports = {
   // publicPath: `${NODE_ENV === 'development' ? '' : '.'}/${APP_NAME}/`,
-  publicPath: NODE_ENV === 'development' ? `http://localhost:${PORT}` : `https://micro-frontends-vue.github.io/final/${APP_NAME}/`,
+  publicPath: NODE_ENV === 'development' ? `http://localhost:${PORT}` : `./${APP_NAME}/`,
 
   css: {
     extract: false

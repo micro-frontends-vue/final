@@ -1,4 +1,11 @@
+import { promiseQueue, runHook, loadModule } from './utils'
+
+let routes = []
 const applications = []
+const cache = Object.create(null)
+
+window.applications = applications
+window._applications = Object.create(null)
 
 // App statuses
 export const NOT_LOADED = 'NOT_LOADED'
@@ -14,64 +21,89 @@ export const UNLOADING = 'UNLOADING'
 export const LOAD_ERROR = 'LOAD_ERROR'
 export const SKIP_BECAUSE_BROKEN = 'SKIP_BECAUSE_BROKEN'
 
-function promiseQueue (promises) {
-  async function queue () {
-    const res = []
-    for (const p of promises) {
-      res.push(await p())
-    }
-    return res
+const loadApplicationFn = async () => {
+  const hashStr = window.location.hash.substring(1)
+
+  if (!hashStr) return
+
+  const route = routes.find(({ path }) => hashStr.startsWith(path))
+
+  if (!route) return
+  if (cache[route.name]) return
+
+  await loadModule(route.entries[0])
+
+  const application = window._applications[route.name]
+
+  cache[route.name] = application
+
+  if (typeof application.render === 'function') {
+    const app = application.render()
+    console.log(name, app)
+    return app
   }
 
-  return queue()
+  return application
 }
 
-function filterActiveApplications () {
+
+const ensureApplication = (application, appName, scope) => {
+  if (!application) {
+    throw new Error(`${scope} --- no application: ${appName}.`)
+  }
+}
+
+const findApplicationIndex = (appName) => {
+  return applications.findIndex(({ name }) => name === appName)
+}
+
+const filterActiveApplications = () => {
   return applications.filter(({ activeWhen }) => activeWhen(window.location))
 }
 
-function filterUnActiveApplications () {
+const filterUnActiveApplications = () => {
   return applications.filter(({ activeWhen, response }) => response && !activeWhen(window.location))
 }
 
-export function getApplications () {
-  return applications
-}
-
-async function match () {
+const match = async () => {
   const activeApplications = filterActiveApplications()
   console.log('active:', activeApplications)
-  for (const application of activeApplications) {
+  for (const { name } of activeApplications) {
     await promiseQueue([
-      async () => loadApplication(application.name),
-      async () => bootstrapApplication(application.name),
+      async () => loadApplication(name),
+      async () => bootstrapApplication(name),
       async () => unmountApplications(),
-      async () => mountApplication(application.name)
+      async () => mountApplication(name)
     ])
   }
 }
 
-export async function start () {
-  console.log('start app')
-  match()
-  window.addEventListener('popstate', (e) => {
-    console.log('popstate, from start:', e)
-    match()
-  })
+export const findApplication = (appName) => {
+  return applications[findApplicationIndex(appName)]
 }
 
-export async function registerApplication (appName, applicationOrLoadingFn, activityFn, customProps = {}) {
+export const registerApplication = async (application) => {
+  const {
+    name,
+    activeWhen,
+    customProps = {},
+    beforeLoad = null,
+    afterLoad = null,
+  } = application
+
   applications.push({
     loadErrorTime: 0,
-    name: appName,
-    loadImpl: applicationOrLoadingFn,
-    activeWhen: activityFn,
     status: NOT_LOADED,
-    customProps
+    name,
+    loadImpl: () => loadApplicationFn(),
+    activeWhen,
+    customProps,
+    beforeLoad,
+    afterLoad
   })
 }
 
-export async function unregisterApplication (appName) {
+export const unregisterApplication = async (appName) => {
   const application = findApplication(appName)
   ensureApplication(application, appName, 'unregister')
 
@@ -81,82 +113,91 @@ export async function unregisterApplication (appName) {
   applications.splice(findApplicationIndex[appName], 1)
 }
 
-export function findApplicationIndex (appName) {
-  return applications.findIndex(({ name }) => name === appName)
-}
-
-export function findApplication (appName) {
-  return applications[findApplicationIndex(appName)]
-}
-
-export async function loadApplication (appName) {
+export const loadApplication = async (appName) => {
   const application = findApplication(appName)
   ensureApplication(application, appName, 'load')
 
   application.status = NOT_BOOTSTRAPPED
 
   if (!application.response) {
+    if (typeof application.beforeLoad === 'function') {
+      await application.beforeLoad()
+    }
     application.response = await application.loadImpl()
+    if (typeof application.afterLoad === 'function') {
+      await application.afterLoad()
+    }
   }
 
   return application
 }
 
-export async function unloadApplication (appName, opts = { waitForUnmount: false }) {
+export const unloadApplication = async (appName, opts = { waitForUnmount: false }) => {
   const application = findApplication(appName)
   ensureApplication(application, appName, 'unload')
+
+  // TODO: ...
 }
 
-export async function bootstrapApplication (appName) {
+export const bootstrapApplication = async (appName) => {
   const application = findApplication(appName)
   ensureApplication(application, appName, 'bootstrap')
 
   const { bootstrap } = application.response
-
   return runHook(bootstrap)
 }
 
-export async function mountApplication (appName) {
+export const mountApplication = async (appName) => {
   const application = findApplication(appName)
   ensureApplication(application, appName, 'mount')
 
   const { mount } = application.response
-
-  return runHook(mount)
+  const res = await runHook(mount)
+  return res
 }
 
-export async function unmountApplication (appName) {
+export const unmountApplication = async (appName) => {
   const application = findApplication(appName)
   ensureApplication(application, appName, 'unmount')
 
   const { unmount } = application.response
-
   return runHook(unmount)
 }
 
-export async function unmountApplications () {
+export const unmountApplications = async () => {
   const unActiveApplications = filterUnActiveApplications()
-  console.log('unActive:', unActiveApplications)
 
   for (const application of unActiveApplications) {
     await unmountApplication(application.name)
   }
 }
 
-export function navigateToUrl (url) {
+export const start = async () => {
+  console.log('start app')
+  match()
+  window.addEventListener('hashchange', (e) => {
+    console.log('hashchange:', e)
+    match()
+  })
+}
+
+export const startSingleSpa = (_routes = []) => {
+  (routes = _routes).forEach(({ name, activeWhen, beforeLoad, afterLoad }) => {
+    registerApplication({
+      name,
+      activeWhen,
+      beforeLoad,
+      afterLoad
+    })
+  })
+
+  start() // 启动 single-spa
+}
+
+export const getApplications = () => {
+  return applications
+}
+
+export const navigateToUrl = (url) => {
   console.log('navigate to:', url)
-}
-
-function ensureApplication (application, appName, scope) {
-  if (!application) {
-    throw new Error(`${scope} --- no application: ${appName}.`)
-  }
-}
-
-function runHook (hooks) {
-  if (Array.isArray(hooks)) {
-    return Promise.all(hooks.map(hook => hook({})))
-  } else {
-    return hooks({})
-  }
 }
