@@ -2,6 +2,10 @@ import { startSingleSpa } from './lib/application'
 
 window.NProgress.configure({ showSpinner: true })
 
+console.log(process.env.NODE_ENV)
+
+const isProd = process.env.NODE_ENV === 'production'
+
 const pathPrefix = (prefix) => (location) => {
   // console.log('path prefix:', prefix, location.hash)
   return location.hash.startsWith(`#${prefix}`)
@@ -11,7 +15,7 @@ startSingleSpa([
   {
     path: '/javascript',
     name: 'javascript',
-    entries: ['http://localhost:10241/main.js'],
+    entries: [`${isProd ? './javascript' : 'http://localhost:10241'}/main.js`],
     activeWhen: pathPrefix('/javascript'),
     beforeLoad () {
       window.NProgress.start()
@@ -23,7 +27,7 @@ startSingleSpa([
   {
     path: '/typescript',
     name: 'typescript',
-    entries: ['http://localhost:10242/main.js'],
+    entries: [`${isProd ? './typescript' : 'http://localhost:10242'}/main.js`],
     activeWhen: pathPrefix('/typescript'),
     beforeLoad () {
       window.NProgress.start()
