@@ -16,7 +16,7 @@ const tasks = [
   },
 ];
 
-fs.removeSync(path.resolve(__dirname, 'dist'))
+fs.removeSync(path.resolve(__dirname, 'docs'))
 
 for (const { src, dest } of tasks) {
   fs.moveSync(path.resolve(__dirname, src), path.resolve(__dirname, dest))
