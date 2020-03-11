@@ -1,8 +1,9 @@
 // import * as singleSpa from 'single-spa'
 import * as singleSpa from './lib/application'
-import modules from './modules'
 
 window.NProgress.configure({ showSpinner: true })
+
+window._applications = Object.create(null)
 
 const { registerApplication, start, navigateToUrl } = singleSpa
 const cache = Object.create(null)
@@ -12,29 +13,53 @@ const pathPrefix = (prefix) => (location) => {
   return location.hash.startsWith(`#${prefix}`)
 }
 
+const loadModule = (url) => {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.onload = ({ type }) => resolve({ status: type, url });
+    script.onerror = ({ type }) => resolve({ status: type, url });
+    script.src = url;
+    document.body.appendChild(script);
+  });
+}
+
+const routes = [
+  {
+    path: '/javascript',
+    name: 'javascript',
+    entries: ['http://localhost:10241/main.js'],
+  },
+  {
+    path: '/typescript',
+    name: 'typescript',
+    entries: ['http://localhost:10242/main.js'],
+  }
+]
+
 const loadApplication = async () => {
-  const hashStr = window.location.hash
+  const hashStr = window.location.hash.substring(1)
 
   if (!hashStr) return
 
-  const [, name] = hashStr.split('/')
+  const route = routes.find(({ path }) => hashStr.startsWith(path))
 
-  if (!name) return
-  if (!modules.includes(name)) return
-  if (cache[name]) return
+  if (!route) return
+  if (cache[route.name]) return
 
   window.NProgress.start()
 
-  const { default: application } = await window.System.import(`./${name}/main.js`)
-  cache[name] = application
+  await loadModule(route.entries[0])
 
-  // console.log(name, application)
+  const application = window._applications[route.name]
+
+  cache[route.name] = application
 
   window.NProgress.done(true)
 
   if (typeof application.render === 'function') {
     const app = application.render()
-    // console.log(name, app)
+    console.log(name, app)
     return app
   }
 
@@ -54,22 +79,9 @@ const navigateToApplication = async (name) => {
   navigateToUrl(`#/${name}`)
 }
 
-const routes = [
-  {
-    path: '/javascript',
-    name: 'javascript',
-    application: () => loadApplication('javascript')
-  },
-  {
-    path: '/typescript',
-    name: 'typescript',
-    application: () => loadApplication('typescript')
-  }
-]
-
 const startSingleSpa = (routes = []) => {
-  routes.forEach(({ path, name, application }) => {
-    registerApplication(name, application, pathPrefix(path))
+  routes.forEach(({ path, name }) => {
+    registerApplication(name, () => loadApplication(), pathPrefix(path))
   })
 
   start() // 启动 single-spa
@@ -78,4 +90,4 @@ const startSingleSpa = (routes = []) => {
 startSingleSpa(routes)
 
 window.navigateToApplication = navigateToApplication
-window._applications = cache
+// window._applications = cache

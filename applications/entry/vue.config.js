@@ -2,15 +2,6 @@ const webpack = require('webpack')
 const APP_NAME = require('./package.json').name
 const PORT = require('./package.json').devPort
 
-const PROXY = {
-  '/javascript/': {
-    target: 'http://localhost:10241/'
-  },
-  '/typescript/': {
-    target: 'http://localhost:10242/'
-  }
-}
-
 const NODE_ENV = process.env.NODE_ENV || 'development'
 
 log('APP_NAME: ', APP_NAME)
@@ -22,12 +13,6 @@ module.exports = {
   productionSourceMap: false,
 
   configureWebpack: {
-    // externals: {
-    //   vue: 'Vue',
-    //   'vue-router': 'VueRouter',
-    //   vuex: 'Vuex'
-    // },
-
     plugins: [
       new webpack.DefinePlugin({
         'process.env.VUE_APP_NAME': JSON.stringify(APP_NAME)
@@ -37,7 +22,6 @@ module.exports = {
 
   devServer: {
     port: PORT,
-    proxy: PROXY
   }
 }
 

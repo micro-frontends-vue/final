@@ -1,6 +1,6 @@
 <template>
-  <div id="typescript">
-    <div id="typescript-nav">
+  <div class="typescript">
+    <div class="typescript-nav">
       <router-link to="/typescript/home">Home</router-link> |
       <router-link to="/typescript/about">About</router-link>
     </div>
@@ -9,7 +9,7 @@
 </template>
 
 <style>
-#typescript {
+.typescript {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -17,16 +17,16 @@
   color: #2c3e50;
 }
 
-#typescript-nav {
+.typescript-nav {
   padding: 30px;
 }
 
-#typescript-nav a {
+.typescript-nav a {
   font-weight: bold;
   color: #2c3e50;
 }
 
-#typescript-nav a.router-link-exact-active {
+.typescript-nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>

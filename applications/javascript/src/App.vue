@@ -1,6 +1,6 @@
 <template>
-  <div id="javascript">
-    <div id="javascript-nav">
+  <div class="javascript-app">
+    <div class="javascript-nav">
       <router-link to="/javascript/home">Home</router-link> |
       <router-link to="/javascript/about">About</router-link>
     </div>
@@ -9,7 +9,7 @@
 </template>
 
 <style>
-#javascript {
+.javascript-app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -17,16 +17,16 @@
   color: #2c3e50;
 }
 
-#javascript-nav {
+.javascript-nav {
   padding: 30px;
 }
 
-#javascript-nav a {
+.javascript-nav a {
   font-weight: bold;
   color: #2c3e50;
 }
 
-#javascript-nav a.router-link-exact-active {
+.javascript-nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>
