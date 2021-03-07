@@ -10,8 +10,8 @@
     "clean": "lerna clean && rm -rf node_modules"
   },
   "devDependencies": {
-    "fs-extra": "^8.1.0",
-    "lerna": "^3.19.0"
+    "fs-extra": "^9.1.0",
+    "lerna": "^4.0.0"
   },
   "license": "MIT"
 }

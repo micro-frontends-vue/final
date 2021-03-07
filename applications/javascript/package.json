@@ -7,13 +7,12 @@
     "build": "vue-cli-service build --report"
   },
   "dependencies": {
-    "single-spa-vue": "^1.5.4",
     "vue": "2.5.22",
     "vue-router": "3.0.3",
     "vuex": "3.0.1"
   },
   "devDependencies": {
-    "@vue/cli-service": "^4.1.0",
+    "@vue/cli-service": "4.1.0",
     "vue-template-compiler": "2.5.22"
   },
   "postcss": {

@@ -10,7 +10,7 @@
     "single-spa": "^4.4.1"
   },
   "devDependencies": {
-    "@vue/cli-service": "^4.1.0"
+    "@vue/cli-service": "4.1.0"
   },
   "postcss": {
     "plugins": {

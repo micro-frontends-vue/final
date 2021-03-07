@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "@types/webpack-env": "^1.14.1",
-    "single-spa-vue": "^1.5.4",
     "vue": "^2.6.10",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0",
@@ -17,7 +16,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-typescript": "^3.3.0",
-    "@vue/cli-service": "^4.1.0",
+    "@vue/cli-service": "4.1.0",
     "typescript": "^3.0.0",
     "vue-template-compiler": "^2.6.10"
   },

@@ -5,7 +5,7 @@
   ],
   "command": {
     "bootstrap": {
-      "hoist": true,
+      "hoist": false,
       "ignoreScripts": ["prepublish", "prepare"]
     },
     "clean": {

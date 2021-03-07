@@ -39,7 +39,7 @@ const loadApplicationFn = async () => {
 
   if (typeof application.render === 'function') {
     const app = application.render()
-    console.log(name, app)
+    // console.log(route.name, app)
     return app
   }
 

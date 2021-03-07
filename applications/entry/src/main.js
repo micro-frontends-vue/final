@@ -35,5 +35,17 @@ startSingleSpa([
     afterLoad () {
       window.NProgress.done(true)
     },
+  },
+  {
+    path: '/vue3',
+    name: 'vue3',
+    entries: [`${isProd ? './vue3' : 'http://localhost:10243'}/main.js`],
+    activeWhen: pathPrefix('/vue3'),
+    beforeLoad () {
+      window.NProgress.start()
+    },
+    afterLoad () {
+      window.NProgress.done(true)
+    },
   }
 ])
