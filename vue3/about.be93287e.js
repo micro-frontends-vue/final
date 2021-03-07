@@ -1,0 +1,2 @@
+(window["webpackJsonp-vue3"]=window["webpackJsonp-vue3"]||[]).push([["about"],{f820:function(e,n,t){"use strict";t.r(n);var u=t("7a23"),a={class:"about"},c=Object(u["f"])("h1",null,"This is an about page",-1);function o(e,n){return Object(u["o"])(),Object(u["c"])("div",a,[c])}const s={};s.render=o;n["default"]=s}}]);
+//# sourceMappingURL=about.be93287e.js.map
