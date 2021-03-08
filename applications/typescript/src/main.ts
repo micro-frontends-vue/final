@@ -13,6 +13,8 @@ let appInstance: Vue | null = null
 
 const bootstrap = async () => { }
 const mount = async () => {
+  if (appInstance) return
+
   appInstance = new Vue({
     router,
     store,

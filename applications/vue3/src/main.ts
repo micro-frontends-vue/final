@@ -13,6 +13,8 @@ let appInstance: App | null = null
 
 const bootstrap = async () => { }
 const mount = async () => {
+  if (appInstance) return
+
   appInstance = createApp(AppComponent).use(router).use(store)
   appInstance.mount('#vue3')
 }
