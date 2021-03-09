@@ -47,5 +47,17 @@ startSingleSpa([
     afterLoad () {
       window.NProgress.done(true)
     },
+  },
+  {
+    path: '/react17',
+    name: 'react17',
+    entries: [`${isProd ? './react17' : 'http://localhost:10244'}/main.js`],
+    activeWhen: pathPrefix('/react17'),
+    beforeLoad () {
+      window.NProgress.start()
+    },
+    afterLoad () {
+      window.NProgress.done(true)
+    },
   }
 ])

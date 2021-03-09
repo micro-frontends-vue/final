@@ -18,6 +18,10 @@ const tasks = [
     src: 'applications/vue3/dist',
     dest: 'docs/vue3',
   },
+  {
+    src: 'applications/react17/build',
+    dest: 'docs/react17',
+  },
 ];
 
 fs.removeSync(path.resolve(__dirname, 'docs'))
