@@ -19,6 +19,7 @@ const cracoConfig = {
         chunkFilename: '[name].[chunkhash:8].js',
         library: 'app-react17',
         jsonpFunction: `webpackJsonp-${APP_NAME}`,
+        libraryExport: 'default',
         libraryTarget: 'umd'
       }
       webpackConfig.optimization.splitChunks = false

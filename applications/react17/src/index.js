@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+let applications = null
+
 if (window._applications) {
   let appInstance = false
 
@@ -27,7 +29,7 @@ if (window._applications) {
     }
   }
 
-  window._applications.react17 = {
+  applications = {
     bootstrap: [bootstrap],
     mount: [mount],
     unmount: [unmount]
@@ -46,3 +48,5 @@ if (window._applications) {
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+export default applications

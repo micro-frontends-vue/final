@@ -30,9 +30,8 @@ const unmount = async () => {
   }
 }
 
-window._applications.javascript = {
+export default {
   bootstrap: [bootstrap],
   mount: [mount],
   unmount: [unmount]
 }
-

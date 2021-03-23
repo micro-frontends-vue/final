@@ -31,9 +31,10 @@ const loadApplicationFn = async () => {
   if (!route) return
   if (cache[route.name]) return
 
-  await loadModule(route.entries[0])
+  const r = await window.System.import(route.entries[0])
+  // await loadModule(route.entries[0])
 
-  const application = window._applications[route.name]
+  const application = r.default
 
   cache[route.name] = application
 

@@ -30,7 +30,7 @@ const unmount = async () => {
   }
 }
 
-window._applications.typescript = {
+export default {
   bootstrap: [bootstrap],
   mount: [mount],
   unmount: [unmount]

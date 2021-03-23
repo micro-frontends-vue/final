@@ -25,7 +25,7 @@ const unmount = async () => {
   }
 }
 
-window._applications.vue3 = {
+export default {
   bootstrap: [bootstrap],
   mount: [mount],
   unmount: [unmount]

@@ -20,6 +20,7 @@ module.exports = {
       .chunkFilename('[name].[chunkhash:8].js')
       .jsonpFunction(`webpackJsonp-${APP_NAME}`)
       .library(`app-${APP_NAME}`)
+      .libraryExport('default')
       .libraryTarget('umd')
 
     config.optimization.splitChunks(false)
