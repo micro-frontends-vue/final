@@ -12,15 +12,17 @@ console.log('js - vuex:', Vuex.version)
 let appInstance = null
 
 const bootstrap = async () => { }
-const mount = async () => {
+const mount = async (options = {}) => {
   if (appInstance) return
+
+  const el = options.el
 
   appInstance = new Vue({
     router: generateRouter(Vue, VueRouter),
     store: generateStore(Vue, Vuex),
-    render: (h) => h('div', { attrs: { id: 'javascript' } }, [h(App)])
+    render: (h) => h('div', { attrs: { id: el.substr(1) } }, [h(App)])
   })
-  appInstance.$mount('#javascript')
+  appInstance.$mount(document.querySelector(el))
 }
 const unmount = async () => {
   if (appInstance) {

@@ -37,6 +37,7 @@ startSingleSpa([
     },
   },
   {
+    el: '#vue3',
     path: '/vue3',
     name: 'vue3',
     entries: [`${isProd ? './vue3' : 'http://localhost:10243'}/main.js`],

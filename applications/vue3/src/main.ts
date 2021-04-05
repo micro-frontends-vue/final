@@ -12,11 +12,13 @@ console.log('vue3 - vuex:', (Vuex as any).version)
 let appInstance: App | null = null
 
 const bootstrap = async () => { }
-const mount = async () => {
+const mount = async (options: any = {}) => {
   if (appInstance) return
 
+  const el = options.el
+
   appInstance = createApp(AppComponent).use(router).use(store)
-  appInstance.mount('#vue3')
+  appInstance.mount(document.querySelector(el))
 }
 const unmount = async () => {
   if (appInstance) {

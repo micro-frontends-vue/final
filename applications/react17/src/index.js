@@ -8,23 +8,26 @@ let applications = null
 
 if (window._applications) {
   let appInstance = false
+  let el = null
 
   const bootstrap = async () => { }
-  const mount = async () => {
+  const mount = async (options = {}) => {
     if (appInstance) return
+
+    el = options.el
 
     ReactDOM.render(
       <React.StrictMode>
         <App />
       </React.StrictMode>,
-      document.getElementById('react17')
+      document.querySelector(el)
     );
 
     appInstance = true
   }
   const unmount = async () => {
     if (appInstance) {
-      ReactDOM.unmountComponentAtNode(document.getElementById('react17'))
+      ReactDOM.unmountComponentAtNode(document.querySelector(el))
       appInstance = false
     }
   }

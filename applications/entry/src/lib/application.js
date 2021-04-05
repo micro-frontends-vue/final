@@ -3,6 +3,7 @@ import { promiseQueue, runHook, loadModule } from './utils'
 let routes = []
 const applications = []
 const cache = Object.create(null)
+const slotElementSelector = '#sub-app-wrapper'
 
 window.applications = applications
 window._applications = Object.create(null)
@@ -33,6 +34,8 @@ const loadApplicationFn = async () => {
 
   const r = await window.System.import(route.entries[0])
   // await loadModule(route.entries[0])
+
+  // console.log(r)
 
   const application = r.default
 
@@ -68,7 +71,7 @@ const filterUnActiveApplications = () => {
 
 const match = async () => {
   const activeApplications = filterActiveApplications()
-  console.log('active:', activeApplications)
+  // console.log('active:', activeApplications)
   for (const { name } of activeApplications) {
     await promiseQueue([
       async () => loadApplication(name),
@@ -86,6 +89,7 @@ export const findApplication = (appName) => {
 export const registerApplication = async (application) => {
   const {
     name,
+    el,
     activeWhen,
     customProps = {},
     beforeLoad = null,
@@ -96,6 +100,7 @@ export const registerApplication = async (application) => {
     loadErrorTime: 0,
     status: NOT_LOADED,
     name,
+    el,
     loadImpl: () => loadApplicationFn(),
     activeWhen,
     customProps,
@@ -153,7 +158,7 @@ export const mountApplication = async (appName) => {
   ensureApplication(application, appName, 'mount')
 
   const { mount } = application.response
-  const res = await runHook(mount)
+  const res = await runHook(mount, { el: application.el || slotElementSelector })
   return res
 }
 
@@ -177,15 +182,16 @@ export const start = async () => {
   console.log('start app')
   match()
   window.addEventListener('hashchange', (e) => {
-    console.log('hashchange:', e)
+    // console.log('hashchange:', e)
     match()
   })
 }
 
 export const startSingleSpa = (_routes = []) => {
-  (routes = _routes).forEach(({ name, activeWhen, beforeLoad, afterLoad }) => {
+  (routes = _routes).forEach(({ name, el, activeWhen, beforeLoad, afterLoad }) => {
     registerApplication({
       name,
+      el,
       activeWhen,
       beforeLoad,
       afterLoad

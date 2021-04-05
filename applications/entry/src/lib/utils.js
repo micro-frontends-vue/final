@@ -10,11 +10,11 @@ export const promiseQueue = (promises) => {
   return queue()
 }
 
-export const runHook = (hooks) => {
+export const runHook = (hooks, ...params) => {
   if (Array.isArray(hooks)) {
-    return Promise.all(hooks.map(hook => hook({})))
+    return Promise.all(hooks.map(hook => hook(...params)))
   } else {
-    return hooks({})
+    return hooks(...params)
   }
 }
 

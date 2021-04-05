@@ -12,15 +12,17 @@ console.log('ts - vuex:', (Vuex as any).version)
 let appInstance: Vue | null = null
 
 const bootstrap = async () => { }
-const mount = async () => {
+const mount = async (options: any = {}) => {
   if (appInstance) return
+
+  const el = options.el
 
   appInstance = new Vue({
     router,
     store,
-    render: (h: CreateElement) => h('div', { attrs: { id: 'typescript' } }, [h(App)])
+    render: (h: CreateElement) => h('div', { attrs: { id: el.substr(1) } }, [h(App)])
   })
-  appInstance.$mount('#typescript')
+  appInstance.$mount(document.querySelector(el))
 }
 const unmount = async () => {
   if (appInstance) {
